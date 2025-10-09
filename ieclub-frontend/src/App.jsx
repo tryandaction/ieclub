@@ -1,5 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Outlet, Navigate } from 'react-router-dom';
+
+// 导入移动端优化的UI组件
+import MobileOptimizedUI from './MobileOptimizedUI.jsx';
 
 // 导入拆分的所有组件和页面
 import { Navbar } from './components/layout/Navbar.jsx';
@@ -19,6 +22,7 @@ import { ProfilePage } from './pages/profile/ProfilePage.jsx';
 import { LeaderboardPage } from './pages/leaderboard/LeaderboardPage.jsx';
 import { BookmarksPage } from './pages/bookmarks/BookmarksPage.jsx';
 import { SettingsPage } from './pages/settings/SettingsPage.jsx';
+
 
 // ==================== 状态管理 ====================
 // 移至src/store/AuthContext.jsx
@@ -82,32 +86,50 @@ const MainLayout = () => {
 
 // 2. 定义主应用组件，它现在是路由配置中心
 function App() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  // 检测设备类型
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <BrowserRouter> {/* 启用路由功能 */}
-      <Routes> {/* 路由规则列表 */}
-        
-        {/* a. 不需要布局的页面 (登录页, 注册页) */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+      {isMobile ? (
+        // 移动端使用优化的UI
+        <MobileOptimizedUI />
+      ) : (
+        // 桌面端使用现有的布局
+        <Routes> {/* 路由规则列表 */}
 
-        {/* b. 使用主布局的页面 */}
-        <Route path="/" element={<MainLayout />}>
-          {/* 默认子路由，访问'/'时显示 */}
-          <Route index element={<HomePage />} /> 
-          {/* 其他子路由 */}
-          <Route path="trending" element={<HomePage />} /> {/* 热门页也暂时使用首页组件 */}
-          <Route path="events" element={<EventsPage />} />
-          <Route path="match" element={<MatchPage />} />
-          <Route path="profile" element={<ProfilePage />} />
-          <Route path="leaderboard" element={<LeaderboardPage />} />
-          <Route path="bookmarks" element={<BookmarksPage />} />
-          <Route path="settings" element={<SettingsPage />} />
-        </Route>
+          {/* a. 不需要布局的页面 (登录页, 注册页) */}
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
 
-        {/* c. 如果用户访问了不存在的页面，自动跳转回首页 */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+          {/* b. 使用主布局的页面 */}
+          <Route path="/" element={<MainLayout />}>
+            {/* 默认子路由，访问'/'时显示 */}
+            <Route index element={<HomePage />} />
+            {/* 其他子路由 */}
+            <Route path="trending" element={<HomePage />} /> {/* 热门页也暂时使用首页组件 */}
+            <Route path="events" element={<EventsPage />} />
+            <Route path="match" element={<MatchPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="leaderboard" element={<LeaderboardPage />} />
+            <Route path="bookmarks" element={<BookmarksPage />} />
+            <Route path="settings" element={<SettingsPage />} />
+          </Route>
 
-      </Routes>
+          {/* c. 如果用户访问了不存在的页面，自动跳转回首页 */}
+          <Route path="*" element={<Navigate to="/" replace />} />
+
+        </Routes>
+      )}
     </BrowserRouter>
   );
 }

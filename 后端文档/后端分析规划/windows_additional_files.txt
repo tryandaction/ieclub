@@ -1,0 +1,469 @@
+# ==================== uploads/.gitkeep ====================
+# 此文件用于保持 uploads 目录存在
+# Git 不会追踪空目录，所以需要这个占位文件
+# 上传的文件会保存在这个目录下
+
+# 目录说明：
+# uploads/
+#   ├── avatars/     - 用户头像
+#   ├── posts/       - 帖子图片
+#   ├── events/      - 活动封面
+#   └── ocr/         - OCR识别的图片
+
+
+# ==================== logs/.gitkeep ====================
+# 此文件用于保持 logs 目录存在
+# 日志文件会保存在这个目录下
+
+# 日志文件：
+# logs/
+#   ├── combined.log  - 所有日志
+#   ├── error.log     - 错误日志
+#   ├── pm2-error.log - PM2错误日志
+#   └── pm2-out.log   - PM2输出日志
+
+
+# ==================== tests/.gitkeep ====================
+# 此文件用于保持 tests 目录存在
+# 测试文件会保存在这个目录下
+
+# 测试目录结构：
+# tests/
+#   ├── unit/         - 单元测试
+#   ├── integration/  - 集成测试
+#   └── e2e/          - 端到端测试
+
+
+# ==================== Windows批处理文件优化版 ====================
+
+# ========== create-gitkeep.bat ==========
+@echo off
+echo 创建 .gitkeep 文件...
+
+REM 创建占位文件
+type nul > uploads\.gitkeep
+type nul > logs\.gitkeep  
+type nul > tests\.gitkeep
+
+echo .gitkeep 文件创建完成！
+pause
+
+
+# ========== quick-install.bat ==========
+@echo off
+chcp 65001 >nul
+color 0A
+
+echo.
+echo ========================================
+echo 🚀 IEclub 快速安装（Windows）
+echo ========================================
+echo.
+
+REM 检查Node.js
+where node >nul 2>nul
+if %ERRORLEVEL% NEQ 0 (
+    color 0C
+    echo ❌ 未安装 Node.js
+    echo.
+    echo 请先安装 Node.js:
+    echo https://nodejs.org
+    pause
+    exit /b 1
+)
+
+echo ✅ Node.js 已安装
+echo.
+
+REM 安装依赖
+echo 📦 正在安装依赖...
+echo.
+call npm install
+
+if %ERRORLEVEL% EQU 0 (
+    echo.
+    echo ✅ 依赖安装成功！
+    echo.
+    echo 📋 下一步：
+    echo   1. 复制 .env.example 为 .env
+    echo   2. 编辑 .env 配置数据库密码
+    echo   3. 运行 start-dev.bat 启动服务器
+    echo.
+) else (
+    color 0C
+    echo ❌ 依赖安装失败
+    echo.
+)
+
+pause
+
+
+# ========== check-env.bat ==========
+@echo off
+chcp 65001 >nul
+
+echo.
+echo ========================================
+echo 🔍 检查开发环境
+echo ========================================
+echo.
+
+REM 检查Node.js
+echo 检查 Node.js...
+where node >nul 2>nul
+if %ERRORLEVEL% EQU 0 (
+    for /f "tokens=*" %%i in ('node -v') do set NODE_VERSION=%%i
+    echo ✅ Node.js: %NODE_VERSION%
+) else (
+    echo ❌ Node.js 未安装
+)
+echo.
+
+REM 检查npm
+echo 检查 npm...
+where npm >nul 2>nul
+if %ERRORLEVEL% EQU 0 (
+    for /f "tokens=*" %%i in ('npm -v') do set NPM_VERSION=%%i
+    echo ✅ npm: %NPM_VERSION%
+) else (
+    echo ❌ npm 未安装
+)
+echo.
+
+REM 检查PostgreSQL
+echo 检查 PostgreSQL...
+where psql >nul 2>nul
+if %ERRORLEVEL% EQU 0 (
+    echo ✅ PostgreSQL 已安装
+) else (
+    echo ⚠️  PostgreSQL 未安装或未添加到PATH
+    echo.
+    echo 解决方法：
+    echo 1. 安装 PostgreSQL: https://www.postgresql.org/download/windows/
+    echo 2. 添加到环境变量：
+    echo    C:\Program Files\PostgreSQL\14\bin
+)
+echo.
+
+REM 检查Git
+echo 检查 Git...
+where git >nul 2>nul
+if %ERRORLEVEL% EQU 0 (
+    for /f "tokens=*" %%i in ('git --version') do set GIT_VERSION=%%i
+    echo ✅ Git: %GIT_VERSION%
+) else (
+    echo ⚠️  Git 未安装（可选）
+)
+echo.
+
+REM 检查项目文件
+echo 检查项目文件...
+if exist "package.json" (
+    echo ✅ package.json
+) else (
+    echo ❌ package.json 缺失
+)
+
+if exist ".env" (
+    echo ✅ .env
+) else (
+    echo ⚠️  .env 未配置
+    echo    请复制 .env.example 为 .env
+)
+
+if exist "src\server.js" (
+    echo ✅ src\server.js
+) else (
+    echo ❌ src\server.js 缺失
+)
+
+if exist "node_modules" (
+    echo ✅ node_modules
+) else (
+    echo ⚠️  node_modules 缺失
+    echo    请运行: npm install
+)
+echo.
+
+echo ========================================
+echo 检查完成！
+echo ========================================
+pause
+
+
+# ========== create-database.bat ==========
+@echo off
+chcp 65001 >nul
+
+echo.
+echo ========================================
+echo 🗄️  创建数据库
+echo ========================================
+echo.
+
+set /p DB_PASSWORD="请输入 PostgreSQL 密码: "
+
+echo.
+echo 正在创建数据库 ieclub_dev...
+echo.
+
+REM 设置密码环境变量
+set PGPASSWORD=%DB_PASSWORD%
+
+REM 创建数据库
+psql -U postgres -h localhost -c "CREATE DATABASE ieclub_dev;" 2>nul
+
+if %ERRORLEVEL% EQU 0 (
+    echo ✅ 数据库创建成功！
+) else (
+    echo ⚠️  数据库可能已存在或创建失败
+    echo.
+    echo 手动创建方法：
+    echo   1. 打开命令行
+    echo   2. 输入: psql -U postgres
+    echo   3. 输入密码
+    echo   4. 执行: CREATE DATABASE ieclub_dev;
+    echo   5. 退出: \q
+)
+
+echo.
+pause
+
+
+# ========== reset-project.bat ==========
+@echo off
+chcp 65001 >nul
+
+echo.
+echo ========================================
+echo ⚠️  重置项目
+echo ========================================
+echo.
+echo 这将删除：
+echo   - node_modules
+echo   - package-lock.json
+echo   - logs 目录下的日志
+echo.
+
+set /p CONFIRM="确定要重置吗? (y/N): "
+
+if /i "%CONFIRM%"=="y" (
+    echo.
+    echo 正在重置项目...
+    
+    if exist "node_modules" (
+        echo 删除 node_modules...
+        rmdir /s /q node_modules
+    )
+    
+    if exist "package-lock.json" (
+        echo 删除 package-lock.json...
+        del /q package-lock.json
+    )
+    
+    if exist "logs" (
+        echo 清理日志文件...
+        del /q logs\*.log 2>nul
+    )
+    
+    echo.
+    echo ✅ 重置完成！
+    echo.
+    echo 下一步：
+    echo   1. 运行: npm install
+    echo   2. 运行: start-dev.bat
+    echo.
+) else (
+    echo 操作已取消
+)
+
+pause
+
+
+# ========== view-logs.bat ==========
+@echo off
+chcp 65001 >nul
+
+echo.
+echo ========================================
+echo 📋 查看日志
+echo ========================================
+echo.
+echo 1. 查看最新错误日志
+echo 2. 查看所有日志
+echo 3. 清空日志
+echo 4. 退出
+echo.
+
+set /p CHOICE="请选择 (1-4): "
+
+if "%CHOICE%"=="1" (
+    if exist "logs\error.log" (
+        echo.
+        echo ===== 错误日志 =====
+        type logs\error.log | more
+    ) else (
+        echo 错误日志文件不存在
+    )
+    pause
+    goto :eof
+)
+
+if "%CHOICE%"=="2" (
+    if exist "logs\combined.log" (
+        echo.
+        echo ===== 所有日志 =====
+        type logs\combined.log | more
+    ) else (
+        echo 日志文件不存在
+    )
+    pause
+    goto :eof
+)
+
+if "%CHOICE%"=="3" (
+    echo.
+    set /p CONFIRM="确定要清空所有日志吗? (y/N): "
+    if /i "%CONFIRM%"=="y" (
+        del /q logs\*.log 2>nul
+        echo ✅ 日志已清空
+    ) else (
+        echo 操作已取消
+    )
+    pause
+    goto :eof
+)
+
+echo 退出
+pause
+
+
+# ========== README-Windows.md ==========
+# Windows 开发指南
+
+## 快速开始
+
+### 1. 环境检查
+```bash
+# 双击运行
+check-env.bat
+```
+
+### 2. 创建数据库
+```bash
+# 双击运行
+create-database.bat
+```
+
+### 3. 安装依赖
+```bash
+# 双击运行
+quick-install.bat
+```
+
+### 4. 启动项目
+```bash
+# 双击运行
+start-dev.bat
+```
+
+## 常用命令
+
+### npm 命令
+```bash
+npm install          # 安装依赖
+npm run dev          # 开发模式
+npm start            # 生产模式
+npm test             # 运行测试
+npm run lint         # 代码检查
+```
+
+### 数据库命令
+```bash
+# 连接数据库
+psql -U postgres
+
+# 列出所有数据库
+\l
+
+# 连接到数据库
+\c ieclub_dev
+
+# 列出所有表
+\dt
+
+# 退出
+\q
+```
+
+### Git 命令
+```bash
+git status           # 查看状态
+git add .            # 添加所有文件
+git commit -m "msg"  # 提交
+git push             # 推送
+git pull             # 拉取
+```
+
+## Windows 特殊说明
+
+### 路径分隔符
+- Windows: 反斜杠 `\`
+- 示例: `src\controllers\userController.js`
+
+### 环境变量
+- 打开方式: 
+  - Win + R → sysdm.cpl → 高级 → 环境变量
+  - 或搜索"环境变量"
+
+### PostgreSQL 配置
+- 安装路径: `C:\Program Files\PostgreSQL\14`
+- 添加到 PATH: `C:\Program Files\PostgreSQL\14\bin`
+- 服务管理: services.msc
+
+### 端口检查
+```bash
+# 查看端口占用
+netstat -ano | findstr :5000
+
+# 结束进程
+taskkill /PID <进程ID> /F
+```
+
+### PowerShell vs CMD
+- 推荐 PowerShell (功能更强)
+- Git Bash 也很好用
+- CMD 兼容性最好
+
+## 常见问题
+
+### 1. 'psql' 不是内部或外部命令
+**解决**: 添加 PostgreSQL 到环境变量
+
+### 2. npm install 失败
+**解决**: 
+```bash
+npm cache clean --force
+npm install
+```
+
+### 3. 端口被占用
+**解决**: 修改 .env 中的 PORT
+
+### 4. 数据库连接失败
+**解决**: 检查 .env 中的 DB_PASSWORD
+
+## 实用工具
+
+### 推荐安装
+- VS Code - 代码编辑器
+- Git for Windows - 版本控制
+- Postman - API 测试
+- DBeaver - 数据库管理
+
+### VS Code 插件
+- ESLint
+- Prettier
+- GitLens
+- REST Client
+- PostgreSQL

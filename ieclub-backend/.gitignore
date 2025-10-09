@@ -1,0 +1,87 @@
+# ==================== .gitignore ====================
+# 依赖目录
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# 环境变量文件
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.test
+
+# 日志文件
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# 测试覆盖率
+coverage/
+.nyc_output
+*.lcov
+
+# 编辑器和IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# 操作系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 构建输出
+dist/
+build/
+out/
+.next/
+
+# 临时文件
+tmp/
+temp/
+*.tmp
+.cache/
+
+# 上传的文件（可选，看是否需要版本控制）
+uploads/*
+!uploads/.gitkeep
+
+# PM2
+.pm2/
+ecosystem.config.js.bak
+
+# 数据库文件（如果使用SQLite）
+*.sqlite
+*.sqlite3
+*.db
+
+# 备份文件
+*.bak
+*.backup
+*.old
+
+# 其他
+.env.backup
+dump.rdb
+*.pem
+*.key
+!mock-cert.pem

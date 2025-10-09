@@ -1,0 +1,177 @@
+const jwt = require('jsonwebtoken');
+const { User } = require('../models');
+const logger = require('../utils/logger');
+
+/**
+ * 认证中间件 - 验证JWT Token
+ */
+const authMiddleware = async (req, res, next) => {
+  try {
+    // 获取token
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({
+        code: 401,
+        message: '未提供认证令牌'
+      });
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+
+    // 验证token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      if (error.name === 'TokenExpiredError') {
+        return res.status(401).json({
+          code: 401,
+          message: '令牌已过期，请重新登录'
+        });
+      }
+      if (error.name === 'JsonWebTokenError') {
+        return res.status(401).json({
+          code: 401,
+          message: '无效的令牌'
+        });
+      }
+      throw error;
+    }
+
+    // 查找用户
+    const user = await User.findByPk(decoded.userId, {
+      attributes: { exclude: ['passwordHash'] }
+    });
+
+    if (!user) {
+      return res.status(401).json({
+        code: 401,
+        message: '用户不存在或已被删除'
+      });
+    }
+
+    // 将用户信息添加到请求对象
+    req.user = user;
+    req.userId = user.id;
+
+    next();
+  } catch (error) {
+    logger.error('认证中间件错误:', error);
+    return res.status(500).json({
+      code: 500,
+      message: '认证失败'
+    });
+  }
+};
+
+/**
+ * 可选认证中间件 - 用户可能未登录
+ * 如果有token则验证，没有token也继续
+ */
+const optionalAuth = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return next();
+    }
+
+    const token = authHeader.replace('Bearer ', '');
+
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      const user = await User.findByPk(decoded.userId, {
+        attributes: { exclude: ['passwordHash'] }
+      });
+      
+      if (user) {
+        req.user = user;
+        req.userId = user.id;
+      }
+    } catch (error) {
+      // 忽略token验证错误，继续执行
+    }
+
+    next();
+  } catch (error) {
+    logger.error('可选认证中间件错误:', error);
+    next();
+  }
+};
+
+/**
+ * 管理员权限检查中间件
+ */
+const adminMiddleware = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      code: 401,
+      message: '需要登录'
+    });
+  }
+
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({
+      code: 403,
+      message: '需要管理员权限'
+    });
+  }
+
+  next();
+};
+
+/**
+ * 版主权限检查中间件
+ */
+const moderatorMiddleware = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      code: 401,
+      message: '需要登录'
+    });
+  }
+
+  if (req.user.role !== 'admin' && req.user.role !== 'moderator') {
+    return res.status(403).json({
+      code: 403,
+      message: '需要版主权限'
+    });
+  }
+
+  next();
+};
+
+/**
+ * 验证是否为资源所有者
+ */
+const ownerMiddleware = (resourceIdParam = 'id', userIdField = 'authorId') => {
+  return (req, res, next) => {
+    const resourceId = parseInt(req.params[resourceIdParam]);
+    const userId = req.userId;
+
+    // 管理员可以操作任何资源
+    if (req.user.role === 'admin') {
+      return next();
+    }
+
+    // 检查是否为资源所有者
+    // 注意：这个中间件需要在获取资源后使用，或者传入资源对象
+    if (req.resource && req.resource[userIdField] !== userId) {
+      return res.status(403).json({
+        code: 403,
+        message: '无权操作此资源'
+      });
+    }
+
+    next();
+  };
+};
+
+module.exports = {
+  authMiddleware,
+  optionalAuth,
+  adminMiddleware,
+  moderatorMiddleware,
+  ownerMiddleware
+};
