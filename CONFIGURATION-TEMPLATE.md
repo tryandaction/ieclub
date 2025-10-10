@@ -4,59 +4,7 @@
 
 以下是你需要填写的**所有配置信息**，包含了**具体文件位置和代码位置**。请按顺序填写，并妥善保存这些信息。
 
----
 
-## 🌐 第一部分：服务器和域名信息
-
-### 服务器信息（购买服务器后填写）
-```
-服务器公网IP: 39.108.160.112
-服务器登录用户名: root
-服务器密码: ______________________
-服务器地域: 华东2（上海）/ 华南1（深圳）
-```
-
-### 域名信息（已有）
-```
-主域名: www.ieclub.online
-裸域名: ieclub.online
-域名服务商: __________阿里云____________
-```
----
-
-## 🔐 第二部分：数据库配置
-
-### 📍 位置：`ieclub-backend/.env` 文件
-
-**原始代码**（第11-18行）：
-
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=ieclub_prod
-DB_USER=ieclub_user
-DB_PASSWORD=kE7pCg$r@W9nZ!sV
-
-
-## 🔑 第三部分：JWT安全密钥
-
-### 📍 位置：`ieclub-backend/.env` 文件
-
-**原始代码**（第22-25行）：
-```bash
-JWT_SECRET=asdf897asdhjkasd987q2h
-JWT_EXPIRES_IN=7d
-JWT_REFRESH_SECRET=asbdasibiidddwbb1287t182b123
-JWT_REFRESH_EXPIRES_IN=30d
-```
-
-
-## 🤖 第四部分：微信小程序配置
-
-### 📍 位置：`ieclub-backend/.env` 文件
-```
-WECHAT_MINIPROGRAM_APPID=【请填写你的小程序AppID】wxf6389db55319e51c
-WECHAT_MINIPROGRAM_SECRET=【请填写你的小程序AppSecret】8e1e41486bdc645094141fc357945616
-```
 
 
 ## 🔍 第五部分：百度OCR配置
