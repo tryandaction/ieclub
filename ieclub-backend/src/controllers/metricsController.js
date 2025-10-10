@@ -1,5 +1,6 @@
 
 // ==================== src/controllers/metricsController.js ====================
+const { Op, sequelize } = require('sequelize');
 const metrics = require('../utils/metrics');
 const HealthCheck = require('../utils/healthCheck');
 const { AuditLog } = require('../models');

@@ -1,0 +1,62 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/profile/profile",
+    "pages/posts/posts",
+    "pages/events/events",
+    "pages/login/login"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "IEclub",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f8f9fa",
+    "enablePullDownRefresh": true,
+    "onReachBottomDistance": 50
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/events/events",
+        "iconPath": "images/events.png",
+        "selectedIconPath": "images/events-active.png",
+        "text": "活动"
+      },
+      {
+        "pagePath": "pages/posts/posts",
+        "iconPath": "images/posts.png",
+        "selectedIconPath": "images/posts-active.png",
+        "text": "论坛"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "iconPath": "images/profile.png",
+        "selectedIconPath": "images/profile-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 60000,
+    "downloadFile": 60000
+  },
+  "debug": true,
+  "requiredBackgroundModes": [],
+  "permission": {
+    "scope.userInfo": {
+      "desc": "用于完善用户资料"
+    }
+  },
+  "sitemapLocation": "sitemap.json"
+}

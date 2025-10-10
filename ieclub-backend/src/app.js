@@ -25,11 +25,19 @@ const app = express();
 
 // ==================== APM监控初始化 ====================
 // 1. 初始化Sentry（必须在所有中间件之前）
-SentryConfig.init(app);
+const sentryHandlers = SentryConfig.init(app) || {
+  requestHandler: () => (req, res, next) => next(),
+  tracingHandler: () => (req, res, next) => next(),
+  errorHandler: () => (err, req, res, next) => next(err)
+};
 
-// 2. Sentry请求处理
-app.use(SentryConfig.requestHandler());
-app.use(SentryConfig.tracingHandler());
+// 2. Sentry请求处理（安全调用）
+if (sentryHandlers.requestHandler) {
+  app.use(sentryHandlers.requestHandler());
+}
+if (sentryHandlers.tracingHandler) {
+  app.use(sentryHandlers.tracingHandler());
+}
 
 // ==================== 安全中间件 ====================
 // Helmet：设置安全HTTP头
@@ -55,9 +63,14 @@ app.use(helmet({
 // ==================== CORS配置 ====================
 // 开发环境：允许本地前端访问
 const corsOptions = {
-  origin: process.env.NODE_ENV === 'development' 
+  origin: process.env.NODE_ENV === 'development'
     ? ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174']
-    : process.env.CORS_ORIGIN.split(','),
+    : [
+        'https://www.ieclub.online',
+        'https://ieclub.online',
+        'http://www.ieclub.online',
+        'http://ieclub.online'
+      ],
   credentials: true,
   optionsSuccessStatus: 200,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
@@ -231,7 +244,9 @@ app.use((req, res) => {
 
 // ==================== APM监控错误处理 ====================
 // 6. Sentry错误处理（必须在所有路由之后）
-app.use(SentryConfig.errorHandler());
+if (sentryHandlers.errorHandler) {
+  app.use(sentryHandlers.errorHandler());
+}
 
 // ==================== 全局错误处理中间件 ====================
 app.use(errorHandler);

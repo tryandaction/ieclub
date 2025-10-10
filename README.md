@@ -186,9 +186,15 @@ npm run dev
 ```
 
 #### 8. 访问应用
-- 前端地址: http://localhost:5173
-- 后端API: http://localhost:5000/api/v1
-- 健康检查: http://localhost:5000/health
+- **开发环境**:
+  - 前端地址: http://localhost:5173
+  - 后端API: http://localhost:5000/api/v1
+  - 健康检查: http://localhost:5000/health
+
+- **生产环境** (你的域名):
+  - 前端地址: https://www.ieclub.online
+  - 后端API: https://www.ieclub.online/api/v1
+  - 健康检查: https://www.ieclub.online/health
 
 ## 📊 数据模型
 
@@ -373,6 +379,7 @@ docker-compose up -d
 ## 📞 联系方式
 
 - **项目地址**: https://github.com/yourusername/ieclub
+- **在线访问**: https://www.ieclub.online
 - **问题反馈**: https://github.com/yourusername/ieclub/issues
 - **邮箱**: contact@ieclub.com
 

@@ -9,6 +9,7 @@ const postRoutes = require('./post');
 const eventRoutes = require('./event');
 const matchRoutes = require('./match');
 const ocrRoutes = require('./ocr');
+const wechatRoutes = require('./wechat');
 
 // 挂载路由
 router.use('/auth', authRoutes);
@@ -17,6 +18,7 @@ router.use('/posts', postRoutes);
 router.use('/events', eventRoutes);
 router.use('/match', matchRoutes);
 router.use('/ocr', ocrRoutes);
+router.use('/wechat', wechatRoutes);
 
 // API信息接口
 router.get('/', (req, res) => {
@@ -29,7 +31,8 @@ router.get('/', (req, res) => {
       posts: '/posts - 帖子相关',
       events: '/events - 活动相关',
       match: '/match - 好友匹配',
-      ocr: '/ocr - OCR识别'
+      ocr: '/ocr - OCR识别',
+      wechat: '/wechat - 微信小程序相关'
     },
     documentation: 'https://github.com/yourusername/ieclub-backend/blob/main/README.md'
   });

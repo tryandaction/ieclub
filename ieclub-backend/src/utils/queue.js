@@ -1,6 +1,7 @@
 
 
 // ==================== src/utils/queue.js ====================
+const { Op } = require('sequelize');
 const Bull = require('bull');
 const logger = require('./logger');
 
@@ -374,16 +375,16 @@ notificationQueue.process(async (job) => {
     data
   });
 
-  // 如果用户在线，推送实时通知
-  const socketService = require('../services/socketService');
-  if (socketService.isUserOnline(userId)) {
-    socketService.sendToUser(userId, 'notification', {
-      type,
-      title,
-      content,
-      data
-    });
-  }
+  // 如果用户在线，推送实时通知（暂时注释，待实现WebSocket后启用）
+  // const socketService = require('../services/socketService');
+  // if (socketService.isUserOnline(userId)) {
+  //   socketService.sendToUser(userId, 'notification', {
+  //     type,
+  //     title,
+  //     content,
+  //     data
+  //   });
+  // }
 
   return { created: true, userId, type };
 });

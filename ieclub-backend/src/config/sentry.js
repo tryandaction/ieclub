@@ -9,7 +9,12 @@ class SentryConfig {
   static init(app) {
     if (!process.env.SENTRY_DSN) {
       console.warn('⚠️  Sentry DSN未配置，跳过初始化');
-      return;
+      // 返回安全的默认对象，避免undefined错误
+      return {
+        requestHandler: () => (req, res, next) => next(),
+        tracingHandler: () => (req, res, next) => next(),
+        errorHandler: () => (err, req, res, next) => next(err)
+      };
     }
 
     Sentry.init({

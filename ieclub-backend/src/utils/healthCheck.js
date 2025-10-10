@@ -91,12 +91,12 @@ class HealthCheck {
     try {
       const os = require('os');
       const diskusage = require('diskusage');
-      
+
       const path = os.platform() === 'win32' ? 'C:' : '/';
       const info = await diskusage.check(path);
-      
+
       const usedPercent = ((info.total - info.available) / info.total) * 100;
-      
+
       return {
         status: usedPercent < 90 ? 'healthy' : 'warning',
         total: `${Math.round(info.total / 1024 / 1024 / 1024)}GB`,
