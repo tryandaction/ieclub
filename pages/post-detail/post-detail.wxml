@@ -1,0 +1,110 @@
+<!--pages/post-detail/post-detail.wxml - IEClub 主题设计-->
+<view class="container">
+
+  <!-- 加载中 -->
+  <view class="loading-container" wx:if="{{loading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 帖子内容 -->
+  <view class="post-detail card" wx:if="{{post && !loading}}">
+
+    <!-- 帖子头部 -->
+    <view class="post-header flex-between">
+      <view class="post-user flex-center">
+        <image class="post-avatar" src="{{post.userAvatar}}" mode="aspectFill" />
+        <view class="post-author-info">
+          <text class="post-author">{{post.username}}</text>
+        </view>
+      </view>
+      <text class="post-meta">{{post.createdAt}}</text>
+    </view>
+
+    <!-- 帖子内容 -->
+    <view class="post-content">
+      <text class="post-text">{{post.content}}</text>
+
+      <!-- 图片展示 -->
+      <view class="post-images" wx:if="{{post.images && post.images.length > 0}}">
+        <view class="image-grid">
+          <image
+            wx:for="{{post.images}}"
+            wx:key="*this"
+            class="post-image"
+            src="{{item}}"
+            mode="aspectFill"
+            bindtap="previewImage"
+            data-current="{{item}}"
+            data-urls="{{post.images}}"
+          />
+        </view>
+      </view>
+    </view>
+
+    <!-- 帖子操作 -->
+    <view class="post-actions">
+      <view class="post-action-btn flex-center" bindtap="likePost">
+        <text class="iconfont {{post.isLiked ? 'icon-liked' : 'icon-like'}}">
+          {{post.isLiked ? '❤️' : '🤍'}}
+        </text>
+        <text class="action-count">{{post.likeCount || 0}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评论区域 -->
+  <view class="comments-section card" wx:if="{{post && !loading}}">
+    <view class="section-header gradient-primary flex-between">
+      <text class="section-title">💬 评论 ({{comments.length}})</text>
+      <view class="add-comment-btn" bindtap="showCommentBox">
+        <text>✏️ 写评论</text>
+      </view>
+    </view>
+
+    <!-- 评论输入框 -->
+    <view class="comment-input-area" wx:if="{{showCommentInput}}">
+      <view class="input-container">
+        <input
+          class="comment-input input-field"
+          placeholder="写下你的评论..."
+          value="{{commentContent}}"
+          bindinput="onCommentInput"
+          adjust-position="{{true}}"
+          hold-keyboard="{{true}}"
+        />
+        <view class="input-actions flex-between">
+          <button class="cancel-btn btn-outline-blue btn-small" bindtap="hideCommentBox">取消</button>
+          <button class="submit-btn btn-primary btn-small" bindtap="submitComment">发表</button>
+        </view>
+      </view>
+    </view>
+
+    <!-- 评论列表 -->
+    <view class="comments-list">
+      <view
+        class="comment-item"
+        wx:for="{{comments}}"
+        wx:key="id"
+      >
+        <view class="comment-header flex-center">
+          <image class="comment-avatar" src="{{item.userAvatar}}" mode="aspectFill" />
+          <view class="comment-user-info">
+            <text class="comment-username">{{item.username}}</text>
+            <text class="comment-time">{{item.createdAt}}</text>
+          </view>
+        </view>
+        <view class="comment-content">
+          <text class="comment-text">{{item.content}}</text>
+        </view>
+      </view>
+
+      <!-- 空评论提示 -->
+      <view class="no-comments empty-state" wx:if="{{comments.length === 0}}">
+        <view class="empty-icon">💬</view>
+        <text class="empty-text">还没有评论，快来抢沙发吧~</text>
+      </view>
+    </view>
+  </view>
+
+</view>

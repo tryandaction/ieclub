@@ -6,28 +6,25 @@ const fs = require('fs').promises;
 
 exports.recognizeText = async (req, res) => {
   try {
-    if (!req.file) {
-      return res.status(400).json({ message: '请上传图片' });
+    const { image, accurate = false } = req.body;
+
+    if (!image) {
+      return res.status(400).json({ message: '请提供图片数据' });
     }
 
-    const { accurate = false } = req.body;
+    // 选择识别方式 - 传递base64数据
+    const result = accurate
+      ? await recognizeAccurateText(image, true) // true表示是base64数据
+      : await recognizeText(image, true); // true表示是base64数据
 
-    // 选择识别方式
-    const result = accurate 
-      ? await recognizeAccurateText(req.file.path)
-      : await recognizeText(req.file.path);
-
-    // 保存识别记录
+    // 保存识别记录（不保存图片数据，只保存识别结果）
     const record = await OCRRecord.create({
       userId: req.user.id,
-      imagePath: req.file.path,
+      imagePath: null, // base64数据不保存文件路径
       recognizedText: result.text,
       confidence: result.confidence,
       language: result.language
     });
-
-    // 删除临时文件（可选，如果不需要保存原图）
-    // await fs.unlink(req.file.path);
 
     res.json({
       message: '识别成功',
@@ -37,6 +34,7 @@ exports.recognizeText = async (req, res) => {
       recordId: record.id
     });
   } catch (error) {
+    console.error('OCR识别失败:', error);
     res.status(500).json({ message: 'OCR识别失败', error: error.message });
   }
 };

@@ -98,9 +98,9 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' })); // URL编码解�
 
 
 // ==================== APM监控中间件 ====================
-// 3. 性能监控
-app.use(PerformanceMiddleware.requestTiming());
-app.use(metricsCollector.middleware());
+// 3. 性能监控（暂时禁用，避免与健康检查冲突）
+// app.use(PerformanceMiddleware.requestTiming());
+// app.use(metricsCollector.middleware());
 
 
 // ==================== 响应压缩 ====================

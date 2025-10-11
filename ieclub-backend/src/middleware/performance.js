@@ -33,8 +33,8 @@ class PerformanceMiddleware {
       res.end = function(...args) {
         const duration = Date.now() - startTime;
 
-        // 记录请求日志
-        logger.http(req, res, duration);
+        // 记录请求日志（暂时注释掉，避免与健康检查冲突）
+        // logger.http(req, res, duration);
 
         // 性能警告
         if (duration > 1000) {

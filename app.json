@@ -4,7 +4,10 @@
     "pages/profile/profile",
     "pages/posts/posts",
     "pages/events/events",
-    "pages/login/login"
+    "pages/login/login",
+    "pages/ocr/ocr",
+    "pages/post-detail/post-detail",
+    "pages/publish/publish"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -23,26 +26,18 @@
     "list": [
       {
         "pagePath": "pages/index/index",
-        "iconPath": "images/home.png",
-        "selectedIconPath": "images/home-active.png",
         "text": "首页"
       },
       {
         "pagePath": "pages/events/events",
-        "iconPath": "images/events.png",
-        "selectedIconPath": "images/events-active.png",
         "text": "活动"
       },
       {
         "pagePath": "pages/posts/posts",
-        "iconPath": "images/posts.png",
-        "selectedIconPath": "images/posts-active.png",
         "text": "论坛"
       },
       {
         "pagePath": "pages/profile/profile",
-        "iconPath": "images/profile.png",
-        "selectedIconPath": "images/profile-active.png",
         "text": "我的"
       }
     ]
@@ -54,9 +49,6 @@
   "debug": true,
   "requiredBackgroundModes": [],
   "permission": {
-    "scope.userInfo": {
-      "desc": "用于完善用户资料"
-    }
   },
   "sitemapLocation": "sitemap.json"
 }

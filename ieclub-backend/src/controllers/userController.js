@@ -185,7 +185,7 @@ exports.getUserPosts = async (req, res) => {
       include: [{
         model: User,
         as: 'author',
-        attributes: ['id', 'username', 'avatar']
+        attributes: ['id', 'username', 'avatarUrl']
       }],
       order: [['createdAt', 'DESC']],
       limit: parseInt(limit),

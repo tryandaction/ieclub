@@ -39,7 +39,7 @@ exports.getEvents = async (req, res) => {
       include: [{
         model: User,
         as: 'organizer',
-        attributes: ['id', 'username', 'avatar']
+        attributes: ['id', 'username', 'avatarUrl']
       }],
       order: [['startTime', 'ASC']],
       limit: parseInt(limit),
@@ -64,7 +64,7 @@ exports.getEventById = async (req, res) => {
         {
           model: User,
           as: 'organizer',
-          attributes: ['id', 'username', 'avatar', 'major', 'grade']
+          attributes: ['id', 'username', 'avatarUrl', 'major', 'grade']
         },
         {
           model: EventRegistration,
@@ -72,7 +72,7 @@ exports.getEventById = async (req, res) => {
           include: [{
             model: User,
             as: 'user',
-            attributes: ['id', 'username', 'avatar']
+            attributes: ['id', 'username', 'avatarUrl']
           }]
         }
       ]
@@ -270,7 +270,7 @@ exports.getRegistrations = async (req, res) => {
       include: [{
         model: User,
         as: 'user',
-        attributes: ['id', 'username', 'avatar', 'email', 'major', 'grade']
+        attributes: ['id', 'username', 'avatarUrl', 'email', 'major', 'grade']
       }],
       order: [['createdAt', 'DESC']]
     });

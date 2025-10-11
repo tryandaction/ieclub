@@ -126,12 +126,12 @@ exports.getConnections = async (req, res) => {
         {
           model: User,
           as: 'user',
-          attributes: ['id', 'username', 'avatar', 'bio', 'major', 'grade']
+          attributes: ['id', 'username', 'avatarUrl', 'bio', 'major', 'grade']
         },
         {
           model: User,
           as: 'friend',
-          attributes: ['id', 'username', 'avatar', 'bio', 'major', 'grade']
+          attributes: ['id', 'username', 'avatarUrl', 'bio', 'major', 'grade']
         }
       ]
     });

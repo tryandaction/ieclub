@@ -1,0 +1,89 @@
+<!--pages/ocr/ocr.wxml-->
+<view class="container">
+
+  <!-- 头部标题 -->
+  <view class="header">
+    <text class="title">OCR文字识别</text>
+    <text class="subtitle">免费识别图片中的文字</text>
+  </view>
+
+  <!-- 选择图片区域 -->
+  <view class="upload-section">
+    <view class="image-preview" wx:if="{{imagePath}}">
+      <image src="{{imagePath}}" mode="aspectFit" bindtap="previewImage" />
+    </view>
+
+    <view class="upload-btn" wx:if="{{!imagePath}}" bindtap="chooseImage">
+      <text class="iconfont icon-camera"></text>
+      <text>选择图片</text>
+    </view>
+
+    <view class="upload-btn selected" wx:if="{{imagePath}}" bindtap="chooseImage">
+      <text class="iconfont icon-refresh"></text>
+      <text>重新选择</text>
+    </view>
+  </view>
+
+  <!-- 识别按钮 -->
+  <view class="action-section" wx:if="{{imagePath}}">
+    <button
+      class="recognize-btn"
+      type="primary"
+      loading="{{isRecognizing}}"
+      disabled="{{isRecognizing}}"
+      bindtap="recognizeText"
+    >
+      {{isRecognizing ? '识别中...' : '开始识别'}}
+    </button>
+  </view>
+
+  <!-- 识别结果 -->
+  <view class="result-section" wx:if="{{recognizedText}}">
+    <view class="result-header">
+      <text class="result-title">识别结果</text>
+      <view class="result-actions">
+        <button class="copy-btn" size="mini" bindtap="copyText">
+          复制文字
+        </button>
+      </view>
+    </view>
+
+    <view class="result-content">
+      <textarea
+        value="{{recognizedText}}"
+        placeholder="识别结果将在这里显示..."
+        disabled="true"
+        auto-height="true"
+      />
+    </view>
+  </view>
+
+  <!-- 历史记录 -->
+  <view class="history-section" wx:if="{{history.length > 0}}">
+    <view class="history-header">
+      <text class="history-title">历史记录</text>
+      <button class="clear-btn" size="mini" bindtap="clearHistory">
+        清空历史
+      </button>
+    </view>
+
+    <scroll-view class="history-list" scroll-y="true" style="max-height: 300rpx;">
+      <view
+        class="history-item"
+        wx:for="{{history}}"
+        wx:key="id"
+        bindtap="deleteHistoryItem"
+        data-index="{{index}}"
+      >
+        <view class="history-content">
+          <text class="history-text">{{item.text}}</text>
+          <text class="history-time">{{item.time}}</text>
+        </view>
+        <view class="history-delete">
+          <text class="iconfont icon-delete"></text>
+        </view>
+      </view>
+    </scroll-view>
+  </view>
+
+</view>

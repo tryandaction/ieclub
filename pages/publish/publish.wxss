@@ -1,0 +1,343 @@
+/* pages/publish/publish.wxss - IEClub 主题样式 */
+.container {
+  background-color: #f9fafb;
+  min-height: 100vh;
+  padding-bottom: 40rpx;
+}
+
+/* 顶部标题栏 - 使用渐变背景 */
+.header {
+  background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 32rpx 40rpx;
+  border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.header-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: white;
+}
+
+.submit-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1rpx solid rgba(255, 255, 255, 0.3);
+  padding: 12rpx 32rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  backdrop-filter: blur(10rpx);
+  transition: all 0.2s ease;
+}
+
+.submit-btn:active:not(.disabled) {
+  background-color: rgba(255, 255, 255, 0.3);
+  transform: scale(0.98);
+}
+
+.submit-btn.disabled {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.6);
+  opacity: 0.7;
+}
+
+/* 内容输入区域 - 现代化卡片设计 */
+.content-section {
+  background-color: white;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #f3f4f6;
+}
+
+.content-input {
+  width: 100%;
+  min-height: 240rpx;
+  padding: 32rpx 40rpx;
+  font-size: 32rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+  background-color: transparent;
+  border: none;
+}
+
+.content-input:focus {
+  outline: none;
+}
+
+.char-count {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 20rpx 40rpx;
+  background-color: #f9fafb;
+  font-size: 24rpx;
+  border-top: 1rpx solid #f3f4f6;
+}
+
+.count {
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.max {
+  color: #9ca3af;
+}
+
+/* 图片选择区域 - 现代化网格布局 */
+.images-section {
+  background-color: white;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #f3f4f6;
+}
+
+.section-title {
+  padding: 32rpx 40rpx;
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #111827;
+  border-bottom: 1rpx solid #f3f4f6;
+  background-color: #f9fafb;
+}
+
+.images-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 24rpx 32rpx;
+  gap: 16rpx;
+}
+
+.image-item {
+  position: relative;
+  width: 200rpx;
+  height: 200rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s ease;
+}
+
+.image-item:active {
+  transform: scale(0.95);
+}
+
+.image-preview {
+  width: 100%;
+  height: 100%;
+}
+
+.delete-btn {
+  position: absolute;
+  top: -8rpx;
+  right: -8rpx;
+  width: 36rpx;
+  height: 36rpx;
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2rpx solid white;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.12);
+}
+
+.delete-icon {
+  color: white;
+  font-size: 24rpx;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* 操作区域 - 使用卡片设计 */
+.actions-section {
+  background-color: white;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #f3f4f6;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  padding: 32rpx 40rpx;
+  border-bottom: 1rpx solid #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.action-item:active {
+  background-color: #f9fafb;
+}
+
+.action-item:last-child {
+  border-bottom: none;
+}
+
+.action-icon {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
+  border-radius: 16rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.08);
+}
+
+.iconfont {
+  font-size: 48rpx;
+  color: white;
+}
+
+.action-info {
+  flex: 1;
+}
+
+.action-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #111827;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.action-desc {
+  font-size: 26rpx;
+  color: #6b7280;
+  display: block;
+}
+
+/* 发布提示 - 使用信息框样式 */
+.tips-section {
+  background-color: white;
+  margin: 20rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #f3f4f6;
+}
+
+.tip-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 40rpx;
+  border-bottom: 1rpx solid #f3f4f6;
+}
+
+.tip-item:last-child {
+  border-bottom: none;
+}
+
+.tip-text {
+  font-size: 26rpx;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+/* 占位符样式优化 */
+.content-input::placeholder {
+  color: #9ca3af;
+}
+
+/* 文字样式增强 */
+.text-blue { color: #3b82f6; }
+.text-gray { color: #6b7280; }
+.text-dark { color: #111827; }
+.font-semibold { font-weight: 600; }
+
+/* 弹性布局增强 */
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-between {
+  justify-content: space-between;
+}
+
+/* 渐变背景增强 */
+.gradient-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
+}
+
+/* 卡片样式增强 */
+.card {
+  background-color: white;
+  border-radius: 16rpx;
+  margin: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #f3f4f6;
+  overflow: hidden;
+}
+
+/* 输入框样式增强 */
+.textarea-field {
+  width: 100%;
+  padding: 32rpx 40rpx;
+  border: none;
+  font-size: 32rpx;
+  background-color: transparent;
+  min-height: 240rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+.textarea-field:focus {
+  outline: none;
+}
+
+/* 按钮样式增强 */
+.btn-primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #9333ea 100%);
+  color: white;
+  border: none;
+  padding: 12rpx 32rpx;
+  border-radius: 20rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.btn-outline-blue {
+  background-color: white;
+  border: 2rpx solid #3b82f6;
+  color: #3b82f6;
+  padding: 12rpx 24rpx;
+  border-radius: 8rpx;
+  font-size: 26rpx;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-blue:active {
+  background-color: #eff6ff;
+}
+
+.btn-small {
+  padding: 12rpx 24rpx;
+  font-size: 24rpx;
+}

@@ -179,7 +179,7 @@ module.exports = (sequelize, DataTypes) => {
       order: [
         ['viewCount', 'DESC'],
         ['likeCount', 'DESC'],
-        ['createdAt', 'DESC']
+        ['created_at', 'DESC']
       ],
       limit,
       include: [{

@@ -131,6 +131,13 @@ Page({
     });
   },
 
+  // 跳转到OCR识别
+  goToOCR() {
+    wx.navigateTo({
+      url: '/pages/ocr/ocr'
+    });
+  },
+
   // 点赞帖子
   likePost(e) {
     e.stopPropagation();

@@ -47,7 +47,7 @@ exports.getPosts = async (req, res) => {
       order = [['likeCount', 'DESC']];
     } else {
       // 最新：默认排序
-      order = [['createdAt', 'DESC']];
+      order = [['created_at', 'DESC']];
     }
 
     const posts = await Post.findAndCountAll({
@@ -55,7 +55,7 @@ exports.getPosts = async (req, res) => {
       include: [{
         model: User,
         as: 'author',
-        attributes: ['id', 'username', 'avatar', 'major', 'grade']
+        attributes: ['id', 'username', 'avatarUrl', 'major', 'grade']
       }],
       order,
       limit: parseInt(limit),
@@ -91,7 +91,7 @@ exports.getPostById = async (req, res) => {
         {
           model: User,
           as: 'author',
-          attributes: ['id', 'username', 'avatar', 'major', 'grade', 'bio']
+          attributes: ['id', 'username', 'avatarUrl', 'major', 'grade', 'bio']
         },
         {
           model: Comment,
@@ -99,7 +99,7 @@ exports.getPostById = async (req, res) => {
           include: [{
             model: User,
             as: 'author',
-            attributes: ['id', 'username', 'avatar']
+            attributes: ['id', 'username', 'avatarUrl']
           }],
           order: [['createdAt', 'DESC']],
           limit: 20 // 最多返回20条评论
@@ -196,7 +196,7 @@ exports.createPost = async (req, res) => {
       include: [{
         model: User,
         as: 'author',
-        attributes: ['id', 'username', 'avatar']
+        attributes: ['id', 'username', 'avatarUrl']
       }]
     });
 
@@ -422,7 +422,7 @@ exports.getComments = async (req, res) => {
       include: [{
         model: User,
         as: 'author',
-        attributes: ['id', 'username', 'avatar']
+        attributes: ['id', 'username', 'avatarUrl']
       }],
       order: [['createdAt', 'DESC']],
       limit: parseInt(limit),
@@ -484,7 +484,7 @@ exports.addComment = async (req, res) => {
       include: [{
         model: User,
         as: 'author',
-        attributes: ['id', 'username', 'avatar']
+        attributes: ['id', 'username', 'avatarUrl']
       }]
     });
 
@@ -518,7 +518,7 @@ exports.getBookmarkedPosts = async (req, res) => {
         include: [{
           model: User,
           as: 'author',
-          attributes: ['id', 'username', 'avatar']
+          attributes: ['id', 'username', 'avatarUrl']
         }]
       }],
       order: [['createdAt', 'DESC']],

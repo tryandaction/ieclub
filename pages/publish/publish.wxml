@@ -1,0 +1,86 @@
+<!--pages/publish/publish.wxml - IEClub 主题设计-->
+<view class="container">
+
+  <!-- 顶部标题栏 -->
+  <view class="header gradient-primary flex-between">
+    <view class="header-title">✏️ 发布帖子</view>
+    <view class="header-actions">
+      <button
+        class="submit-btn {{submitting ? 'disabled' : ''}}"
+        bindtap="submitPost"
+        disabled="{{submitting}}"
+      >
+        {{submitting ? '🚀 发布中...' : '🚀 发布'}}
+      </button>
+    </view>
+  </view>
+
+  <!-- 内容输入区域 -->
+  <view class="content-section card">
+    <textarea
+      class="content-input textarea-field"
+      placeholder="💭 分享你的想法..."
+      value="{{content}}"
+      bindinput="onContentInput"
+      maxlength="500"
+      adjust-position="{{true}}"
+      hold-keyboard="{{true}}"
+    />
+
+    <!-- 字符计数 -->
+    <view class="char-count flex">
+      <view class="flex-1"></view>
+      <text class="count text-blue">{{contentLength}}</text>
+      <text class="max text-gray">/500</text>
+    </view>
+  </view>
+
+  <!-- 图片选择区域 -->
+  <view class="images-section card" wx:if="{{images.length > 0}}">
+    <view class="section-title flex-between">
+      <text class="text-dark font-semibold">🖼️ 图片 ({{images.length}}/9)</text>
+    </view>
+    <view class="images-grid">
+      <view
+        class="image-item"
+        wx:for="{{images}}"
+        wx:key="*this"
+      >
+        <image
+          class="image-preview"
+          src="{{item}}"
+          mode="aspectFill"
+          bindtap="previewImage"
+          data-current="{{item}}"
+        />
+        <view class="delete-btn" bindtap="deleteImage" data-index="{{index}}">
+          <text class="delete-icon">❌</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作区域 -->
+  <view class="actions-section card">
+    <view class="action-item flex-center" bindtap="chooseImage">
+      <view class="action-icon gradient-primary">
+        <text class="iconfont">📷</text>
+      </view>
+      <view class="action-info flex-1">
+        <text class="action-title font-semibold">📸 添加图片</text>
+        <text class="action-desc text-gray">支持最多9张图片</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 发布提示 -->
+  <view class="tips-section card">
+    <view class="tip-item flex-center">
+      <text class="tip-text">💡 发布内容应遵守社区规范</text>
+    </view>
+    <view class="tip-item flex-center">
+      <text class="tip-text">💡 图片内容应清晰可见</text>
+    </view>
+  </view>
+
+</view>

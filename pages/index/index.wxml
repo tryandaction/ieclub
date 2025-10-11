@@ -1,0 +1,97 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+
+  <!-- 欢迎区域 -->
+  <view class="welcome-section">
+    <view class="user-info" wx:if="{{userInfo}}">
+      <text class="welcome-text">欢迎回来，{{userInfo.nickname || userInfo.username}}</text>
+    </view>
+    <view class="app-title">
+      <text class="title">IEclub</text>
+      <text class="subtitle">兴趣交流社区</text>
+    </view>
+  </view>
+
+  <!-- 快速功能区 -->
+  <view class="quick-actions">
+    <view class="action-card ocr-card" bindtap="goToOCR">
+      <view class="action-icon">
+        <text class="iconfont icon-ocr">📷</text>
+      </view>
+      <view class="action-info">
+        <text class="action-title">OCR识别</text>
+        <text class="action-desc">免费识别图片文字</text>
+      </view>
+    </view>
+
+    <view class="action-card publish-card" bindtap="goToPublish">
+      <view class="action-icon">
+        <text class="iconfont icon-publish">✏️</text>
+      </view>
+      <view class="action-info">
+        <text class="action-title">发布帖子</text>
+        <text class="action-desc">分享你的想法</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 帖子列表 -->
+  <view class="posts-section">
+    <view class="section-header">
+      <text class="section-title">最新帖子</text>
+      <navigator class="more-link" url="/pages/posts/posts">查看更多</navigator>
+    </view>
+
+    <view class="posts-list">
+      <view
+        class="post-item"
+        wx:for="{{posts}}"
+        wx:key="id"
+        bindtap="goToPost"
+        data-id="{{item.id}}"
+      >
+        <view class="post-header">
+          <view class="post-user">
+            <image class="avatar" src="{{item.userAvatar}}" mode="aspectFill" />
+            <text class="username">{{item.username}}</text>
+          </view>
+          <text class="post-time">{{item.createdAt}}</text>
+        </view>
+
+        <view class="post-content">
+          <text class="post-text">{{item.content}}</text>
+          <view class="post-images" wx:if="{{item.images && item.images.length > 0}}">
+            <image
+              class="post-image"
+              src="{{item.images[0]}}"
+              mode="aspectFill"
+              bindtap="previewImage"
+              data-current="{{item.images[0]}}"
+              data-urls="{{item.images}}"
+            />
+          </view>
+        </view>
+
+        <view class="post-actions">
+          <view class="action-item" bindtap="likePost" data-id="{{item.id}}" data-index="{{index}}">
+            <text class="iconfont {{item.isLiked ? 'icon-liked' : 'icon-like'}}">
+              {{item.isLiked ? '❤️' : '🤍'}}
+            </text>
+            <text class="action-count">{{item.likeCount}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 加载更多 -->
+      <view class="loading-more" wx:if="{{loading}}">
+        <text>加载中...</text>
+      </view>
+
+      <!-- 没有更多内容 -->
+      <view class="no-more" wx:if="{{!hasMore && posts.length > 0}}">
+        <text>没有更多内容了</text>
+      </view>
+    </view>
+  </view>
+
+</view>

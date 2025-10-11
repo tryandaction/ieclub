@@ -91,106 +91,164 @@ class SentryConfig {
   }
 
   /**
-   * 请求处理中间件
-   */
-  static requestHandler() {
-    return Sentry.Handlers.requestHandler({
-      user: ['id', 'email', 'nickname'],
-      ip: true,
-      request: true,
-      transaction: true
-    });
-  }
+    * 请求处理中间件
+    */
+   static requestHandler() {
+     // 检查Sentry是否已正确初始化
+     if (!Sentry.Handlers || !Sentry.Handlers.requestHandler) {
+       console.warn('⚠️  Sentry未初始化，返回空中间件');
+       return (req, res, next) => next();
+     }
+
+     return Sentry.Handlers.requestHandler({
+       user: ['id', 'email', 'nickname'],
+       ip: true,
+       request: true,
+       transaction: true
+     });
+   }
+
+   /**
+    * 追踪中间件
+    */
+   static tracingHandler() {
+     // 检查Sentry是否已正确初始化
+     if (!Sentry.Handlers || !Sentry.Handlers.tracingHandler) {
+       console.warn('⚠️  Sentry未初始化，返回空中间件');
+       return (req, res, next) => next();
+     }
+
+     return Sentry.Handlers.tracingHandler();
+   }
+
+   /**
+    * 错误处理中间件
+    */
+   static errorHandler() {
+     // 检查Sentry是否已正确初始化
+     if (!Sentry.Handlers || !Sentry.Handlers.errorHandler) {
+       console.warn('⚠️  Sentry未初始化，返回空中间件');
+       return (err, req, res, next) => next(err);
+     }
+
+     return Sentry.Handlers.errorHandler({
+       shouldHandleError(error) {
+         // 只报告500错误
+         return error.status >= 500;
+       }
+     });
+   }
 
   /**
-   * 追踪中间件
-   */
-  static tracingHandler() {
-    return Sentry.Handlers.tracingHandler();
-  }
+    * 手动捕获异常
+    */
+   static captureException(error, context = {}) {
+     if (!Sentry.captureException) {
+       console.warn('⚠️  Sentry未初始化，跳过异常捕获');
+       return;
+     }
 
-  /**
-   * 错误处理中间件
-   */
-  static errorHandler() {
-    return Sentry.Handlers.errorHandler({
-      shouldHandleError(error) {
-        // 只报告500错误
-        return error.status >= 500;
-      }
-    });
-  }
+     Sentry.captureException(error, {
+       tags: context.tags || {},
+       extra: context.extra || {},
+       level: context.level || 'error'
+     });
+   }
 
-  /**
-   * 手动捕获异常
-   */
-  static captureException(error, context = {}) {
-    Sentry.captureException(error, {
-      tags: context.tags || {},
-      extra: context.extra || {},
-      level: context.level || 'error'
-    });
-  }
+   /**
+    * 捕获消息
+    */
+   static captureMessage(message, level = 'info', context = {}) {
+     if (!Sentry.captureMessage) {
+       console.warn('⚠️  Sentry未初始化，跳过消息捕获');
+       return;
+     }
 
-  /**
-   * 捕获消息
-   */
-  static captureMessage(message, level = 'info', context = {}) {
-    Sentry.captureMessage(message, {
-      level,
-      tags: context.tags || {},
-      extra: context.extra || {}
-    });
-  }
+     Sentry.captureMessage(message, {
+       level,
+       tags: context.tags || {},
+       extra: context.extra || {}
+     });
+   }
 
-  /**
-   * 设置用户上下文
-   */
-  static setUser(user) {
-    Sentry.setUser({
-      id: user.id,
-      email: user.email,
-      username: user.nickname
-    });
-  }
+   /**
+    * 设置用户上下文
+    */
+   static setUser(user) {
+     if (!Sentry.setUser) {
+       console.warn('⚠️  Sentry未初始化，跳过用户上下文设置');
+       return;
+     }
 
-  /**
-   * 清除用户上下文
-   */
-  static clearUser() {
-    Sentry.setUser(null);
-  }
+     Sentry.setUser({
+       id: user.id,
+       email: user.email,
+       username: user.nickname
+     });
+   }
 
-  /**
-   * 添加面包屑
-   */
-  static addBreadcrumb(breadcrumb) {
-    Sentry.addBreadcrumb({
-      timestamp: Date.now(),
-      ...breadcrumb
-    });
-  }
+   /**
+    * 清除用户上下文
+    */
+   static clearUser() {
+     if (!Sentry.setUser) {
+       console.warn('⚠️  Sentry未初始化，跳过用户上下文清除');
+       return;
+     }
 
-  /**
-   * 性能追踪
-   */
-  static startTransaction(name, op = 'http.server') {
-    return Sentry.startTransaction({
-      name,
-      op,
-      trimEnd: true
-    });
-  }
+     Sentry.setUser(null);
+   }
 
-  /**
-   * 创建span
-   */
-  static startSpan(transaction, name, op) {
-    return transaction.startChild({
-      op,
-      description: name
-    });
-  }
+   /**
+    * 添加面包屑
+    */
+   static addBreadcrumb(breadcrumb) {
+     if (!Sentry.addBreadcrumb) {
+       console.warn('⚠️  Sentry未初始化，跳过面包屑添加');
+       return;
+     }
+
+     Sentry.addBreadcrumb({
+       timestamp: Date.now(),
+       ...breadcrumb
+     });
+   }
+
+   /**
+    * 性能追踪
+    */
+   static startTransaction(name, op = 'http.server') {
+     if (!Sentry.startTransaction) {
+       console.warn('⚠️  Sentry未初始化，返回空事务对象');
+       return {
+         finish: () => {},
+         startChild: () => ({})
+       };
+     }
+
+     return Sentry.startTransaction({
+       name,
+       op,
+       trimEnd: true
+     });
+   }
+
+   /**
+    * 创建span
+    */
+   static startSpan(transaction, name, op) {
+     if (!transaction || !transaction.startChild) {
+       console.warn('⚠️  Sentry未初始化或事务无效，返回空span对象');
+       return {
+         finish: () => {}
+       };
+     }
+
+     return transaction.startChild({
+       op,
+       description: name
+     });
+   }
 }
 
 module.exports = SentryConfig;

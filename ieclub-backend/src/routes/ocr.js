@@ -14,14 +14,13 @@ const {
 
 /**
  * @route   POST /api/v1/ocr/recognize
- * @desc    识别图片文字
+ * @desc    识别图片文字（支持base64数据）
  * @access  Private
  */
 router.post(
   '/recognize',
   authMiddleware,
   ocrLimiter,
-  upload.single('image'),
   ocrController.recognizeText
 );
 
