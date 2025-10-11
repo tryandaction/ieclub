@@ -2,7 +2,7 @@
 App({
   globalData: {
     userInfo: null,
-    baseURL: 'https://www.ieclub.online' // 请替换为您的后端域名
+    baseURL: 'https://www.ieclub.online/api/v1' // 后端API基础地址
   },
 
   onLaunch() {
